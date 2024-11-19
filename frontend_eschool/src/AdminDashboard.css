@@ -1,0 +1,15 @@
+.sidebar {
+  position: fixed;
+  top: 56px; /* This assumes your navbar height is 56px */
+  height: calc(100vh - 56px);
+  z-index: 1000;
+  background-color: #28a745;
+  width: 250px;
+  overflow-y: auto;
+}
+
+.main-content {
+  margin-left: 250px;
+  padding-top: 70px; /* Adjust for navbar height */
+  width: calc(100% - 250px);
+}

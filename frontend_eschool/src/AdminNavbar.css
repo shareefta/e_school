@@ -1,0 +1,27 @@
+.navbar-nav .nav-link {
+    margin-right: 1rem;
+  }
+  
+  .btn-outline-danger {
+    margin-left: 1rem;
+  }
+
+  .bg-aqua {
+    background-color: #00FFFF;
+  }
+
+  .navbar {
+    z-index: 1020;
+  }
+  
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 100%; /* Sidebar takes full width on smaller screens */
+      position: absolute;
+    }
+    .main-content {
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+  

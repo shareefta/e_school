@@ -1,0 +1,58 @@
+/* Style for logo and button on larger screens */
+.logo-img {
+    width: 150px;
+    height: auto;
+}
+
+.login-btn {
+    padding: 8px 16px;
+    font-size: 16px;
+}
+
+/* Adjustments for smaller screens */
+@media (max-width: 768px) {
+.logo-img {
+    width: 100px; /* Reduce logo size on smaller screens */
+}
+
+.login-btn {
+    padding: 6px 12px; /* Smaller button padding */
+    font-size: 14px;    /* Smaller font size for the button */
+}
+}
+
+.fixed-top {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1030;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+footer {
+    background: white;
+    color: #1c0202;
+    font-size: 14px;
+}
+
+footer a:hover {
+    color: #ffc107;
+}
+
+footer h5 {
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+footer hr {
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.bi {
+    transition: color 0.3s ease;
+}
+
+.bi:hover {
+    color: #ffc107;
+}
