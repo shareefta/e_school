@@ -41,3 +41,11 @@ class Admin(AbstractBaseUser, PermissionsMixin):
     def has_module_perms(self, app_label):
         """Does the user have permissions to view the app 'app_label'?"""
         return self.is_superuser
+
+class CarouselImage(models.Model):
+    image = models.ImageField(upload_to='carousel_images/')
+    caption = models.CharField(max_length=255, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.caption or f"Image {self.id}"

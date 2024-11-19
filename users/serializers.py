@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Admin
 from django.contrib.auth import authenticate
+from .models import CarouselImage
 
 class AdminSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -27,3 +28,14 @@ class AdminLoginSerializer(serializers.Serializer):
         if user and user.is_active:
             return user
         raise serializers.ValidationError("Invalid credentials")
+
+class CarouselImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CarouselImage
+        fields = ['id', 'image', 'caption']
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        if instance.image:
+            representation['image'] = instance.image.url  # Ensure URL is included
+        return representation

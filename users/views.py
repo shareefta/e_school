@@ -3,11 +3,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny
-from .serializers import AdminSerializer, AdminLoginSerializer
+from .serializers import AdminSerializer, AdminLoginSerializer, CarouselImageSerializer
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.contrib.auth import authenticate
-from users.models import Admin
+from users.models import Admin, CarouselImage
 
 
 class AdminRegisterView(APIView):
@@ -70,3 +70,9 @@ class AdminLoginView(APIView):
         else:
             # If authentication fails
             return JsonResponse({'error': 'Invalid credentials'}, status=400)
+
+class CarouselImageView(APIView):
+    def get(self, request):
+        images = CarouselImage.objects.all().order_by('-created_at')
+        serializer = CarouselImageSerializer(images, many=True)
+        return Response(serializer.data)
