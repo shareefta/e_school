@@ -1,94 +1,58 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import logo from '../../images/logo.jpg';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { adminsignin } from "../ApiUtility";
 
-function AdminLogin() {
-  const [loginData, setLoginData] = useState({
-    email: '',
-    password: '',
-  });
+const AdminSignin = () => {
+    const [formData, setFormData] = useState({ mobile_number: "", password: "" });
+    const [message, setMessage] = useState("");
+    const navigate = useNavigate(); // Initialize useNavigate
 
-  const [error, setError] = useState(null);
-  const navigate = useNavigate();
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
 
-  const handleChange = (e) => {
-    setLoginData({
-      ...loginData,
-      [e.target.name]: e.target.value,
-    });
-  };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const response = await adminsignin(formData);
+        console.log(response);
+        if (response.token) {
+            // Save token in localStorage
+            localStorage.setItem("token", response.token);
+            const role = response.user.role; // Accessing role correctly
+            console.log("Role:", role);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post('http://127.0.0.1:8000/login/', {
-        email: loginData.email,
-        password: loginData.password,
-      });
+            // Navigate based on role
+            if (response.user.role === "admin") {
+                navigate("/admindashboard");
+            } else if (response.user.role === "management") {
+                navigate("/mgmdashboard");
+            } else {
+                setMessage("Unknown role. Please contact support.");
+            }
+        } else {
+            setMessage("Signin failed. Please check your credentials.");
+        }
+    };
 
-      if (response.data.token) {
-        localStorage.setItem('token', response.data.token);
+    return (
+        <form onSubmit={handleSubmit}>
+            <input
+                name="mobile_number"
+                placeholder="Mobile Number"
+                onChange={handleChange}
+                value={formData.mobile_number}
+            />
+            <input
+                name="password"
+                type="password"
+                placeholder="Password"
+                onChange={handleChange}
+                value={formData.password}
+            />
+            <button type="submit">Signin</button>
+            <p>{message}</p>
+        </form>
+    );
+};
 
-        const fullName = `${response.data.first_name} ${response.data.last_name}`;
-        localStorage.setItem('fullName', fullName);
-
-        alert('Login successful!');
-        navigate('/dashboard'); 
-      } else {
-        setError('Invalid login credentials.');
-      }
-    } catch (error) {
-      setError('Login failed. Please try again.');
-    }
-  };
-
-  return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-5">
-          <div className="card shadow">
-            <div className="card-body">
-              <div className="text-center">
-                <img src={logo} alt="Logo" className="mb-3" style={{ width: '100px' }}/>
-              </div>
-              <h4 className="card-title text-center">Admin Login</h4>
-              {error && <p className="text-danger text-center">{error}</p>}
-              <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                  <label>Email:</label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    name="email"
-                    value={loginData.email}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="form-group mt-3">
-                  <label>Password:</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    name="password"
-                    value={loginData.password}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="d-grid gap-2 mt-4">
-                  <button type="submit" className="btn btn-primary btn-block">
-                    Login
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default AdminLogin;
+export default AdminSignin;
