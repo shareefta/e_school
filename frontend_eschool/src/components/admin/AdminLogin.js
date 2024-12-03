@@ -13,26 +13,31 @@ const AdminSignin = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const response = await adminsignin(formData);
-        console.log(response);
-        if (response.token) {
-            // Save token in localStorage
-            localStorage.setItem("token", response.token);
-            const role = response.user.role; // Accessing role correctly
-            console.log("Role:", role);
-
-            // Navigate based on role
-            if (response.user.role === "admin") {
-                navigate("/admindashboard");
-            } else if (response.user.role === "management") {
-                navigate("/mgmdashboard");
+        try {
+            const response = await adminsignin(formData); // Ensure this is properly implemented and tested
+            if (response.token) {
+                const fullName = `${response.user.first_name} ${response.user.last_name}`;
+                // Save necessary details in localStorage
+                localStorage.setItem("token", response.token);
+                localStorage.setItem("adminName", fullName);
+                localStorage.setItem("role", response.user.role); // Save role explicitly for future checks
+    
+                // Navigate based on role
+                if (response.user.role === "admin") {
+                    navigate("/admindashboard");
+                } else if (response.user.role === "management") {
+                    navigate("/mgmdashboard");
+                } else {
+                    setMessage("Unknown role. Please contact support.");
+                }
             } else {
-                setMessage("Unknown role. Please contact support.");
+                setMessage("Signin failed. Please check your credentials.");
             }
-        } else {
-            setMessage("Signin failed. Please check your credentials.");
+        } catch (error) {
+            setMessage("An error occurred during signin. Please try again.");
+            console.error("Signin error:", error);
         }
-    };
+    };        
 
     return (
         <form onSubmit={handleSubmit}>

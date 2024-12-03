@@ -42,25 +42,26 @@ function HomePage() {
     // Simulate login state. You can replace this with actual authentication logic.
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+    useEffect(() => {
+        // Check login state from localStorage
+        const loggedInStatus = localStorage.getItem("isLoggedIn") === "true";
+        setIsLoggedIn(loggedInStatus);
+    }, []);
+
     const handleLoginClick = () => {
+        localStorage.setItem("isLoggedIn", "true"); // Persist login state
         navigate("/adminlogin");
         setIsLoggedIn(true);
     };
 
     const handleLogoutClick = () => {
-        // Simulate logout action
+        localStorage.removeItem("token");
+        localStorage.removeItem("role"); // Optional, if you're storing roles
+        localStorage.setItem("isLoggedIn", "false"); // Update login state
+        navigate("/adminlogin"); // Redirect to login page
         setIsLoggedIn(false);
     };
 
-    useEffect(() => {
-        const hash = window.location.hash;
-        if (hash) {
-            const section = document.querySelector(hash);
-            if (section) {
-                section.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-    }, []);
     return (
         <>
             <div style={{ backgroundColor: 'aqua', minHeight: '100vh' }}>
@@ -107,11 +108,35 @@ function HomePage() {
                                 </li>
                             </ul>
                         </div>
-                        <div className="d-flex align-items-center ">
+                        <div className="d-flex align-items-center">
                             {isLoggedIn ? (
-                                <i className="bi bi-box-arrow-right fs-2 me-3" onClick={handleLogoutClick}></i>
+                                <div className="d-flex align-items-center me-3">
+                                    <button
+                                        className="btn btn-success d-flex align-items-center me-1"
+                                        style={{ borderRadius: '20px', padding: '5px 15px' }}
+                                    >
+                                        <a className="nav-link" href="/admindashboard" style={{ fontSize: '18px', backgroundColor: 'green' }} title="Dashboard">
+                                            <i className="bi bi-grid-fill" style={{ color: 'white' }}></i>
+                                        </a>
+                                    </button>
+                                    <button
+                                        className="btn btn-danger d-flex align-items-center me-2"
+                                        onClick={handleLogoutClick}
+                                        style={{ borderRadius: '10px', padding: '5px 15px' }}
+                                    >
+                                        <i className="bi bi-power me-2"></i>
+                                        Logout
+                                    </button>
+                                </div>
                             ) : (
-                                <i className="bi bi-box-arrow-in-right fs-2 me-3" onClick={handleLoginClick}></i>
+                                <button
+                                className="btn btn-success d-flex align-items-center me-3"
+                                onClick={handleLoginClick}
+                                style={{ borderRadius: '10px', padding: '5px 15px' }}
+                                >
+                                <i className="bi bi-power me-2"></i>
+                                Login
+                                </button>
                             )}
                         </div>
                     </nav>

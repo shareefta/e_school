@@ -1,10 +1,10 @@
-import React from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import React from "react";
+import { Navigate, Outlet } from "react-router-dom";
 
 const PrivateRoute = () => {
-    const isAuthenticated = localStorage.getItem('token'); // Or your auth logic
+    const isAuthenticated = localStorage.getItem("token"); // Check if the user is authenticated
 
-    return isAuthenticated ? <Outlet /> : <Navigate to="/adminlogin" />;
+    return isAuthenticated ? <Outlet /> : <Navigate to="/adminlogin" replace />;
 };
 
 export default PrivateRoute;

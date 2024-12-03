@@ -12,6 +12,7 @@ export const adminsignup = async (data) => {
     return await response.json();
 };
 
+
 export const adminsignin = async (data) => {
     const response = await fetch(`${API_URL}/adminsignin/`, {
         method: "POST",
