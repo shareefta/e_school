@@ -1,25 +1,36 @@
-import React, { useState } from 'react';
-// import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import logo from '../images/logo.jpg';
 
 const Navbar = () => {
+    const navigate = useNavigate();
     // Simulate login state. You can replace this with actual authentication logic.
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-    const handleLoginClick = () => {
-        // Simulate login/logout action
-        setIsLoggedIn(true);
-    };
-
-    const handleLogoutClick = () => {
-        // Simulate logout action
-        setIsLoggedIn(false);
-    };
+    
+        useEffect(() => {
+            // Check login state from localStorage
+            const loggedInStatus = localStorage.getItem("isLoggedIn") === "true";
+            setIsLoggedIn(loggedInStatus);
+        }, []);
+    
+        const handleLoginClick = () => {
+            localStorage.setItem("isLoggedIn", "true"); // Persist login state
+            navigate("/adminlogin");
+            setIsLoggedIn(true);
+        };
+    
+        const handleLogoutClick = () => {
+            localStorage.removeItem("token");
+            localStorage.removeItem("role"); // Optional, if you're storing roles
+            localStorage.setItem("isLoggedIn", "false"); // Update login state
+            navigate("/adminlogin"); // Redirect to login page
+            setIsLoggedIn(false);
+        };
 
     return (
         <div className="container">
             <nav className="navbar navbar-expand-lg navbar-light bg-white d-flex align-items-center justify-content-between fixed-top">
-                <a className="nav-link" href="/#home"><img src={logo} alt="Logo" className="logo-img" /></a>
+                <a className="nav-link ms-3" href="/#home"><img src={logo} alt="Logo" className="logo-img" /></a>
                 <button
                     className="navbar-toggler"
                     type="button"
@@ -44,6 +55,11 @@ const Navbar = () => {
                             </a>
                         </li>
                         <li className="nav-item">
+                            <a className="nav-link" href="/#contact" style={{ fontSize: '18px' }}>
+                                <i className="bi bi-heart-fill" style={{ color: 'blue' }}></i> Takaful
+                            </a>
+                        </li>
+                        <li className="nav-item">
                             <a className="nav-link" href="/#events" style={{ fontSize: '18px' }}>
                                 <i className="bi bi-calendar-event-fill" style={{ color: 'blue' }}></i> Events
                             </a>
@@ -57,9 +73,33 @@ const Navbar = () => {
                 </div>
                 <div className="d-flex align-items-center">
                     {isLoggedIn ? (
-                        <button className="btn btn-danger" onClick={handleLogoutClick}>Sign Out</button>
+                        <div className="d-flex align-items-center me-3">
+                            <button
+                                className="btn btn-success d-flex align-items-center me-1"
+                                style={{ borderRadius: '20px', padding: '5px 15px' }}
+                            >
+                                <a className="nav-link" href="/admindashboard" style={{ fontSize: '18px', backgroundColor: 'green' }} title="Dashboard">
+                                    <i className="bi bi-grid-fill" style={{ color: 'white' }}></i>
+                                </a>
+                            </button>
+                            <button
+                                className="btn btn-danger d-flex align-items-center me-2"
+                                onClick={handleLogoutClick}
+                                style={{ borderRadius: '10px', padding: '5px 15px' }}
+                            >
+                                <i className="bi bi-power me-2"></i>
+                                Logout
+                            </button>
+                        </div>
                     ) : (
-                        <button className="btn btn-primary" onClick={handleLoginClick}>Login</button>
+                        <button
+                        className="btn btn-success d-flex align-items-center me-3"
+                        onClick={handleLoginClick}
+                        style={{ borderRadius: '10px', padding: '5px 15px' }}
+                        >
+                        <i className="bi bi-power me-2"></i>
+                        Login
+                        </button>
                     )}
                 </div>
             </nav>

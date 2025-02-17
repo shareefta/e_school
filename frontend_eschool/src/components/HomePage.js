@@ -169,14 +169,14 @@ function HomePage() {
                         </div>
                         <div className="row justify-content-center mt-3">
                             {[
-                                { title: "Mansha'ussunna Da'wa College", link: "/dars" },
-                                { title: "BQ World Hifz College", link: "/hifz" },
-                                { title: "Women's Academy", link: "/wa" },
-                                { title: "Zahratul Qur'an Pre School", link: "/zq" },
-                                { title: "English Medium School", link: "/es" },
-                                { title: "Lower Primary School", link: "/lps" },
+                                { title: "Mansha'ussunna Da'wa College", link: "/dars", logo: "/logos/logo_dars.jpg" },
+                                { title: "BQ World Hifz College", link: "/bq", logo: "/logos/logo_bq.jpg" },
+                                { title: "Women's Academy", link: "/wa", logo: "/logos/logo_wa.jpg" },
+                                { title: "Zahratul Qur'an Pre School", link: "/zq", logo: "/logos/logo_zq_2.png" },
+                                { title: "English Medium School", link: "/es", logo: "/logos/logo_es.jpg" },
+                                { title: "Lower Primary School", link: "/lps", logo: "/logos/lower_primary.png" },
                             ].map((institution, index) => (
-                                <div className="col-md-2 col-sm-6 mb-3" key={index}>
+                                <div className="col-md-4 col-sm-6 mb-3" key={index}>
                                     <Link to={institution.link} className="text-decoration-none">
                                         <div
                                             className="card text-center shadow-lg p-3 text-white"
@@ -185,10 +185,27 @@ function HomePage() {
                                                 borderRadius: '10px',
                                             }}
                                         >
-                                            <i
-                                                className="bi bi-mortarboard"
-                                                style={{ fontSize: '2rem', color: 'white' }}
-                                            ></i>
+                                            {/* Institution Logo */}
+                                            <div 
+                                                style={{
+                                                    width: '100%', 
+                                                    height: '150px', 
+                                                    overflow: 'hidden', 
+                                                    display: 'flex', 
+                                                    alignItems: 'center', 
+                                                    justifyContent: 'center',
+                                                }}
+                                            >
+                                                <img
+                                                    src={institution.logo}
+                                                    alt={`${institution.title} logo`}
+                                                    style={{
+                                                        maxHeight: '100%',
+                                                        maxWidth: '100%',
+                                                        borderRadius: '5%',
+                                                    }}
+                                                />
+                                            </div>
                                             <h5 className="card-title mt-2"><b>{institution.title}</b></h5>
                                         </div>
                                     </Link>
